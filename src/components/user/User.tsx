@@ -97,12 +97,12 @@ export default function User() {
       <div style={{ border:'1px solid red', width:'auto',height:'auto', margin:'20px 40px', borderRadius:'4px'}} className="d-flex justify-content-between flex-wrap">
         <div style={{ border:'1px solid red', padding:'10px 20px',alignSelf:'center'}}>
           <h1 style={{fontSize:'25px', textAlign:'center'}}>Today</h1>
-          <PieChart width={600} height={400}>
+          <PieChart width={500} height={400}>
             <Pie
               activeIndex={activeIndex}
               activeShape={renderActiveShape}
               data={data}
-              cx={300}
+              cx={250}
               cy={200}
               innerRadius={90}
               outerRadius={120}
@@ -114,12 +114,12 @@ export default function User() {
         </div>
         <div style={{ border:'1px solid red', padding:'10px 20px',alignSelf:'center'}}>
           <h1 style={{fontSize:'25px', textAlign:'center'}}>Previous Day</h1>
-          <PieChart width={600} height={400}>
+          <PieChart width={500} height={400}>
             <Pie
               activeIndex={activeIndex}
               activeShape={renderActiveShape}
               data={data}
-              cx={320}
+              cx={250}
               cy={200}
               innerRadius={90}
               outerRadius={120}
