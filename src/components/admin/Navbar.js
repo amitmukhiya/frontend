@@ -1,50 +1,68 @@
 import React from "react";
+import Task from "../utils/Task";
+import Form from "../utils/Form";
+import './Pop.css';
+import { useState, useEffect} from "react";
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { logout, reset } from '../../features/auth/authSlice'
 
 export default function Navbar() {
-  const name = "bot";
+  const [modalOpen, setModalOpen] = useState(false);
+  const [count, setCount] = useState(1);
+  
+ //jatin;s code
+ const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const { user } = useSelector((state) => state.auth)
+
+  const onLogout = () => {
+    navigate('/')
+    dispatch(logout())
+    dispatch(reset())
+  }
+  useEffect(() => {
+    if (!user) navigate('/')
+  }, [user])
+
+  const name=user&&user.isAdmin?"Admin":"User";
+  const temp=name==="Admin"?"Add Employee":"Add Task"
+  //jatin;s code ends here
+
+ //
   return (
-    <>
-      <div className="">
-        <nav className="navbar navbar-expand-lg bg-light ">
-          <div className="container-fluid">
-            <a className="navbar-brand" href="#">
-              Add User
-            </a>
-            <div className="collapse navbar-collapse" id="navbarNavDropdown">
-              <ul className="navbar-nav">
-                {/* <li className="nav-item">
-                                    <a className="nav-link" href="#">
-                                        Pricing
-                                    </a>
-                                </li> */}
-                <li className="nav-item dropdown">
-                  <a
-                    className="nav-link dropdown-toggle "
-                    href="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    {name}
-                  </a>
-                  <ul className="dropdown-menu">
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Profile
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Log out
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
+    <div>
+
+      <nav className="navbar navbar-light bg-dark justify-content-between px-4">
+      {user?<><button className="btn bg-white" onClick={() => {
+          setCount(count + 1);
+          if (count % 2 === 1) {
+            setModalOpen(true);
+          } else {
+            setModalOpen(false);
+          }
+        }}>{temp}</button>
+        <div>
+        <button className="btn bg-white my-2 my-sm-0 mx-2" type="submit">{user.name}</button>
+        <button className="btn bg-white my-2 my-sm-0" type="submit" onClick={onLogout}>Logout</button>
+        </div></>:<div className="bg-light btn">Employee Tracker</div>}
+      </nav>
+      {modalOpen &&temp==="Add Employee"&& <div className="modalBackground">
+        <div className="modalContainer">
+          <div className="body" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {modalOpen && <Form setOpenModal={setModalOpen} />}
           </div>
-        </nav>
-      </div>
-    </>
+        </div>
+      </div>}
+      {modalOpen &&temp==="Add Task"&& <div className="modalBackground">
+        <div className="modalContainer">
+          <div className="body" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {modalOpen && <Task setOpenModal={setModalOpen} />}
+          </div>
+        </div>
+      </div>}
+    </div>
   );
 }
+

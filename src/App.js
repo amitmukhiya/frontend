@@ -1,21 +1,25 @@
-
-// import './App.css';
-
-import Admin from "./components/admin/Admin";
-// import Login from "./components/Login";
-import User from "./components/user/User.tsx";
-import Pop from "./components/utils/Pop";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Admin from './components/admin/Admin'
+import Login from './components/Login'
+import User from './components/user/User.tsx'
+import Navbar from './components/admin/Navbar'
+import Footer from './components/Footer'
 
 function App() {
   return (
-    <div className="App">
-      {/* <Login/> */}
-      {/* <Admin/> */}
-      {/* <User/> */}
-      {/* <User/> */}
-      <Pop/>
-    </div>
-  );
+    <>
+      <Router>
+        
+          <Navbar />
+          <Routes>
+            <Route path='/' element={<Login />} />
+            <Route path='/:id/admin' element={<Admin />} exact />
+            <Route path='/:id' element={<User />} exact />
+          </Routes>
+          <Footer />
+      </Router>
+    </>
+  )
 }
 
-export default App;
+export default App
