@@ -8,7 +8,6 @@ export default function Admin() {
     <>
     <Navbar/>
     <DataTable/>
-    {/* <a href="a">Add User</a> */}
     </>
   )
 }
