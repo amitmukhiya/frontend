@@ -4,7 +4,6 @@ import Login from './components/Login'
 import User from './components/user/User.tsx'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
-// import Pop from './components/utils/Pop'
 
 function App() {
   return (
