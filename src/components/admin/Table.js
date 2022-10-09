@@ -54,7 +54,6 @@ export default function DataTable() {
 
   const { users } = useSelector((state) => state.auth)
   const { user } = useSelector((state) => state.auth)
-  // console.log(user)
 
   useEffect(() => {
     if (user) dispatch(getUsers(user))
