@@ -1,23 +1,41 @@
-import { Link } from "react-router-dom";
 import React from "react";
 import Task from "../utils/Task";
 import Form from "../utils/Form";
-import Popup from 'reactjs-popup';
 import './Pop.css';
-import { useState } from "react";
+import { useState, useEffect} from "react";
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { logout, reset } from '../../features/auth/authSlice'
 
 export default function Navbar() {
   const [modalOpen, setModalOpen] = useState(false);
   const [count, setCount] = useState(1);
-  // const [task, setTask] = useState(false);
-  const name="Admin"
+  
+ //jatin;s code
+ const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const { user } = useSelector((state) => state.auth)
+
+  const onLogout = () => {
+    navigate('/')
+    dispatch(logout())
+    dispatch(reset())
+  }
+  useEffect(() => {
+    if (!user) navigate('/')
+  }, [user])
+
+  const name=user&&user.isAdmin?"Admin":"User";
   const temp=name==="Admin"?"Add Employee":"Add Task"
- 
+  //jatin;s code ends here
+
+ //
   return (
     <div>
 
       <nav className="navbar navbar-light bg-dark justify-content-between px-4">
-      <button className="btn bg-white" onClick={() => {
+      {user?<><button className="btn bg-white" onClick={() => {
           setCount(count + 1);
           if (count % 2 === 1) {
             setModalOpen(true);
@@ -26,9 +44,9 @@ export default function Navbar() {
           }
         }}>{temp}</button>
         <div>
-        <button className="btn bg-white my-2 my-sm-0 mx-2" type="submit">{name}</button>
-        <button className="btn bg-white my-2 my-sm-0" type="submit">Logout</button>
-        </div>
+        <button className="btn bg-white my-2 my-sm-0 mx-2" type="submit">{user.name}</button>
+        <button className="btn bg-white my-2 my-sm-0" type="submit" onClick={onLogout}>Logout</button>
+        </div></>:<div className="bg-light btn">Employee Tracker</div>}
       </nav>
       {modalOpen &&temp==="Add Employee"&& <div className="modalBackground">
         <div className="modalContainer">
