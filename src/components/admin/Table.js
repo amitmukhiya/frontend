@@ -1,10 +1,13 @@
-import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import { useEffect } from 'react'
+import { DataGrid } from '@mui/x-data-grid'
+import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { getUsers } from '../../features/auth/authSlice'
 
 const columns = [
-  { field: 'id', headerName: 'ID', width: 100 },
-//   { field: 'firstName', headerName: 'First name', width: 130 },
-//   { field: 'lastName', headerName: 'Last name', width: 130 },
+  { field: 'id', headerName: 'id', width: 100 },
+  //   { field: 'firstName', headerName: 'First name', width: 130 },
+  //   { field: 'lastName', headerName: 'Last name', width: 130 },
   {
     field: 'employeeName',
     headerName: 'Employee name',
@@ -37,30 +40,54 @@ const columns = [
     field: 'joiningDate',
     headerName: 'Joining Date',
     width: 180,
-  }
-];
-
-const rows = [
-  { id: 1, employeeName: 'Snow',email:'john@gmail.com', department:'some', contactNumber:'77777', joiningDate:'1/1/1' },
-  { id: 2, employeeName: 'Mow',email:'mohn@gmail.com', department:'some', contactNumber:'77777', joiningDate:'1/1/1' },
-  { id: 3, employeeName: 'Snow',email:'john@gmail.com', department:'some', contactNumber:'77777', joiningDate:'1/1/1' },
-  { id: 4, employeeName: 'Mow',email:'mohn@gmail.com', department:'some', contactNumber:'77777', joiningDate:'1/1/1' },
-  { id: 5, employeeName: 'Snow',email:'john@gmail.com', department:'some', contactNumber:'77777', joiningDate:'1/1/1' },
-  { id: 6, employeeName: 'Mow',email:'mohn@gmail.com', department:'some', contactNumber:'77777', joiningDate:'1/1/1' },
-  
-];
+  },
+  {
+    field: '_id',
+    headerName: '_id',
+    width: 180,
+  },
+]
 
 export default function DataTable() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const { users } = useSelector((state) => state.auth)
+  const { user } = useSelector((state) => state.auth)
+  // console.log(user)
+
+  useEffect(() => {
+    if (user) dispatch(getUsers(user))
+  }, [user, dispatch])
+
+  let rows = []
+  for (let i = 0; i < users.length; i++) {
+    const u = {
+      id: i + 1,
+      employeeName: users[i].name,
+      email: users[i].email,
+      department: users[i].department,
+      contactNumber: users[i].contactNumber,
+      joiningDate: user.joiningDate,
+      _id: users[i]._id,
+    }
+    rows.push(u)
+  }
+  const onClick = (e) => {
+    navigate(`/${e.row._id}`)
+  }
   return (
-    <div style={{ height: 400, width: '75%', padding:'20px', margin:'20px, 0' }}>
+    <div
+      style={{ height: 400, width: '75%', padding: '20px', margin: '20px, 0' }}
+    >
       <DataGrid
         rows={rows}
         columns={columns}
         pageSize={10}
         rowsPerPageOptions={[10]}
         checkboxSelection
+        onRowClick={onClick}
       />
     </div>
-  );
+  )
 }
-

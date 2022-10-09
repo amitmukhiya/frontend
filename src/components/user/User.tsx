@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from "react";
 import { PieChart, Pie, Sector } from "recharts";
-import Navbar from "../admin/Navbar";
 import StackedChart from "./StackedChart";
 
 const data = [
@@ -93,7 +92,6 @@ export default function User() {
 
   return (
     <div>
-      <Navbar />
       <div style={{ border:'1px solid red', width:'auto',height:'auto', margin:'20px 40px', borderRadius:'4px'}} className="d-flex justify-content-between flex-wrap">
         <div style={{ border:'1px solid red', padding:'10px 20px',alignSelf:'center'}}>
           <h1 style={{fontSize:'25px', textAlign:'center'}}>Today</h1>
