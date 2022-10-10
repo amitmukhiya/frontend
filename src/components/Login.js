@@ -5,6 +5,7 @@ import { toast } from 'react-toastify'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Spinner from './Spinner'
+import { NotificationManager } from 'react-notifications';
 
 const Login = () => {
   const [formData, setFromData] = useState({
@@ -12,6 +13,8 @@ const Login = () => {
     password: '',
   })
 
+  // const [word, setWord] = useState()
+  
   const { email, password } = formData
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -23,10 +26,14 @@ const Login = () => {
   const redirect = user && user.isAdmin ? '/admin' : ''
   useEffect(() => {
     if (isError) {
+      NotificationManager.error('Please check your email or password', 'Login denied!', 2000);
       toast.error(message)
     }
     if (isSuccess || user) {
-      navigate(`/${user._id}${redirect}`)
+    navigate(`/${user._id}${redirect}`)
+    }
+    if(isSuccess){
+      NotificationManager.success(`Welcome ${user.name}`, 'Login Successful', 2000);
     }
 
     dispatch(reset())
@@ -48,14 +55,12 @@ const Login = () => {
 
     dispatch(login(userData))
   }
-
   if (isLoading) {
     return <Spinner />
   }
-
   return (
     <>
-      <div className='login'>
+      <div className='login' style={{boxShadow: 'rgba(0, 0, 0,0.4) 10px 5px 15px'}}>
         <h1>LOGIN</h1>
         <div className='details'>
           <form className='form' onSubmit={onSubmit}>
@@ -80,7 +85,7 @@ const Login = () => {
               placeholder='Enter password'
               onChange={onChange}
             />
-            <input className='sub' type='submit' value='Submit' />
+            <input className='sub' type='submit' value='Submit'/>
           </form>
         </div>
       </div>

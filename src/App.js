@@ -4,12 +4,14 @@ import Login from './components/Login'
 import User from './components/user/User.tsx'
 import Navbar from './components/admin/Navbar'
 import Footer from './components/Footer'
+import 'react-notifications/lib/notifications.css';
+import { NotificationContainer } from 'react-notifications';
 
 function App() {
   return (
     <>
       <Router>
-        
+      <NotificationContainer/>
           <Navbar />
           <Routes>
             <Route path='/' element={<Login />} />

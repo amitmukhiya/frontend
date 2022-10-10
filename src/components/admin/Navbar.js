@@ -6,6 +6,9 @@ import { useState, useEffect} from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { logout, reset } from '../../features/auth/authSlice'
+import { NotificationManager } from 'react-notifications';
+
+
 
 export default function Navbar() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -45,7 +48,7 @@ export default function Navbar() {
         }}>{temp}</button>
         <div>
         <button className="btn bg-white my-2 my-sm-0 mx-2" type="submit">{user.name}</button>
-        <button className="btn bg-white my-2 my-sm-0" type="submit" onClick={onLogout}>Logout</button>
+        <button className="btn bg-white my-2 my-sm-0" type="submit" onClick={()=>{onLogout();NotificationManager.success('', 'Logout Successful', 2000)} }>Logout</button>
         </div></>:<div className="bg-light btn">Employee Tracker</div>}
       </nav>
       {modalOpen &&temp==="Add Employee"&& <div className="modalBackground">
