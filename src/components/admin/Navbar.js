@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { logout, reset } from '../../features/auth/authSlice'
+import { resetT } from '../../features/tasks/taskSlice'
 
 export default function Navbar() {
   const [modalOpen, setModalOpen] = useState(false)
@@ -21,6 +22,7 @@ export default function Navbar() {
     navigate('/')
     dispatch(logout())
     dispatch(reset())
+    dispatch(resetT())
   }
   useEffect(() => {
     if (!user) navigate('/')

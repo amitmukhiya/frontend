@@ -1,6 +1,9 @@
-import React, { useCallback, useState } from "react";
-import { PieChart, Pie, Sector } from "recharts";
-import StackedChart from "./StackedChart";
+import React, {useEffect, useCallback, useState } from "react"
+import { PieChart, Pie, Sector } from "recharts"
+import {toast} from 'react-toastify'
+import StackedChart from "./StackedChart"
+import { useSelector,useDispatch } from "react-redux"
+import { getTasks } from "../../features/tasks/taskSlice"
 
 const data = [
   { name: "Break", value: 400 },
@@ -8,7 +11,7 @@ const data = [
   { name: "Work", value: 300 },
 ];
 
-const renderActiveShape = (props: any) => {
+const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
   const {
     cx,
@@ -82,6 +85,10 @@ const renderActiveShape = (props: any) => {
 };
 
 export default function User() {
+  const dispatch=useDispatch()
+
+  const { tasks,isError,isSuccess,message } = useSelector((state) => state.tasks)
+
   const [activeIndex, setActiveIndex] = useState(0);
   const onPieEnter = useCallback(
     (_, index) => {
@@ -89,6 +96,15 @@ export default function User() {
     },
     [setActiveIndex]
   );
+
+  useEffect(()=>{
+    if(isError){
+      toast.error(message)
+    }
+    if(!isSuccess){
+      dispatch(getTasks())
+    }
+  },[isSuccess,tasks,isError,message,dispatch])
 
   return (
     <div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { createTask } from '../../features/tasks/taskSlice'
+import { createTask, resetT } from '../../features/tasks/taskSlice'
 import { toast } from 'react-toastify'
 
 export default function Task(setOpenModal) {
@@ -10,9 +10,9 @@ export default function Task(setOpenModal) {
 
   const [formData, setFormData] = useState({
     description: '',
-    type: '',
+    type: 'Break',
     startTime: '',
-    timeTaken: 0,
+    timeTaken: 1,
   })
 
   const { description, type, startTime, timeTaken } = formData
@@ -42,7 +42,9 @@ export default function Task(setOpenModal) {
     }
 
     dispatch(createTask(taskData))
-    setOpenModal(false)
+    dispatch(resetT())
+
+    // setOpenModal(false)
   }
 
   return (

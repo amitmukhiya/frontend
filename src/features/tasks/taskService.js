@@ -1,14 +1,15 @@
 import axios from 'axios'
 
-const API_URL = '/api/tasks'
+const API_URL = '/api/tasks/'
 
 //create task
 const createTask = async (taskData, token) => {
   const config = {
     headers: {
-      autherization: `Bearer ${token}`,
+      authorization: `Bearer ${token}`,
     },
   }
+  console.log(taskData)
 
   const response = await axios.post(API_URL, taskData, config)
 
@@ -19,7 +20,7 @@ const createTask = async (taskData, token) => {
 const getTasks = async (token) => {
   const config = {
     headers: {
-      autherization: `Bearer ${token}`,
+      authorization: `Bearer ${token}`,
     },
   }
 
