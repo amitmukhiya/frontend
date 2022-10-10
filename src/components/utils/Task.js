@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { createTask, resetT } from '../../features/tasks/taskSlice'
 import { toast } from 'react-toastify'
 
-export default function Task(setOpenModal) {
+export default function Task({setOpenModal}) {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -44,7 +44,7 @@ export default function Task(setOpenModal) {
     dispatch(createTask(taskData))
     dispatch(resetT())
 
-    // setOpenModal(false)
+    setOpenModal(false)
   }
 
   return (

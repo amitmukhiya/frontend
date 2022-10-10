@@ -1,15 +1,11 @@
-import React, {useEffect, useCallback, useState } from "react"
-import { PieChart, Pie, Sector } from "recharts"
-import {toast} from 'react-toastify'
-import StackedChart from "./StackedChart"
-import { useSelector,useDispatch } from "react-redux"
-import { getTasks } from "../../features/tasks/taskSlice"
+import React, { useEffect, useCallback, useState } from "react";
+import { PieChart, Pie, Sector } from "recharts";
+import { toast } from "react-toastify";
+import StackedChart from "./StackedChart";
+import { useSelector, useDispatch } from "react-redux";
+import { getTasks } from "../../features/tasks/taskSlice";
+import { getCurrentDate } from "../utils/Date";
 
-const data = [
-  { name: "Break", value: 400 },
-  { name: "Meeting", value: 300 },
-  { name: "Work", value: 300 },
-];
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
@@ -85,9 +81,11 @@ const renderActiveShape = (props) => {
 };
 
 export default function User() {
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
 
-  const { tasks,isError,isSuccess,message } = useSelector((state) => state.tasks)
+  const { tasks, isError, isSuccess, message } = useSelector(
+    (state) => state.tasks
+  );
 
   const [activeIndex, setActiveIndex] = useState(0);
   const onPieEnter = useCallback(
@@ -97,20 +95,89 @@ export default function User() {
     [setActiveIndex]
   );
 
-  useEffect(()=>{
-    if(isError){
-      toast.error(message)
+  // console.log(tasks);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
     }
-    if(!isSuccess){
-      dispatch(getTasks())
+    if (!isSuccess) {
+      dispatch(getTasks());
     }
-  },[isSuccess,tasks,isError,message,dispatch])
+  }, [isSuccess, tasks, isError, message, dispatch]);
+
+  let breakTime = 0;
+  let meetingTime = 0;
+  let workTime = 0;
+
+  let breakTimeP = 0;
+  let meetingTimeP = 0;
+  let workTimeP = 0;
+
+
+  for (let i = 0; i < tasks.length; i++) {
+    let subDate =
+      tasks[i].startTime.substr(0, 4) +
+      tasks[i].startTime.substr(5, 2) +
+      tasks[i].startTime.substr(8, 2);
+      let x=parseInt(subDate)
+      let y=parseInt(getCurrentDate())
+    // console.log(x)
+    // console.log(y)
+    if (x === y) {
+      if (tasks[i].type === "Break") {
+        breakTime += tasks[i].timeTaken;
+      } else if (tasks[i].type === "Meeting") {
+        meetingTime += tasks[i].timeTaken;
+      } else {
+        workTime += tasks[i].timeTaken;
+      }
+    }
+    if (x === y-1) {
+      if (tasks[i].type === "Break") {
+        breakTimeP += tasks[i].timeTaken;
+      } else if (tasks[i].type === "Meeting") {
+        meetingTimeP += tasks[i].timeTaken;
+      } else {
+        workTimeP += tasks[i].timeTaken;
+      }
+    }
+  }
+  
+  const data = [
+    { name: "Break", value: breakTime },
+    { name: "Meeting", value: meetingTime },
+    { name: "Work", value: workTime },
+  ]
+  // previous day-----
+ 
+  const data1 = [
+    { name: "Break", value: breakTimeP },
+    { name: "Meeting", value: meetingTimeP },
+    { name: "Work", value: workTimeP },
+  ];
+  // previous day ends here
 
   return (
     <div>
-      <div style={{ border:'1px solid red', width:'auto',height:'auto', margin:'20px 40px', borderRadius:'4px'}} className="d-flex justify-content-between flex-wrap">
-        <div style={{ border:'1px solid red', padding:'10px 20px',alignSelf:'center'}}>
-          <h1 style={{fontSize:'25px', textAlign:'center'}}>Today</h1>
+      <div
+        style={{
+          border: "1px solid red",
+          width: "auto",
+          height: "auto",
+          margin: "20px 40px",
+          borderRadius: "4px",
+        }}
+        className="d-flex justify-content-between flex-wrap"
+      >
+        <div
+          style={{
+            border: "1px solid red",
+            padding: "10px 20px",
+            alignSelf: "center",
+          }}
+        >
+          <h1 style={{ fontSize: "25px", textAlign: "center" }}>Today</h1>
           <PieChart width={500} height={400}>
             <Pie
               activeIndex={activeIndex}
@@ -126,13 +193,21 @@ export default function User() {
             />
           </PieChart>
         </div>
-        <div style={{ border:'1px solid red', padding:'10px 20px',alignSelf:'center'}}>
-          <h1 style={{fontSize:'25px', textAlign:'center'}}>Previous Day</h1>
+        <div
+          style={{
+            border: "1px solid red",
+            padding: "10px 20px",
+            alignSelf: "center",
+          }}
+        >
+          <h1 style={{ fontSize: "25px", textAlign: "center" }}>
+            Previous Day
+          </h1>
           <PieChart width={500} height={400}>
             <Pie
               activeIndex={activeIndex}
               activeShape={renderActiveShape}
-              data={data}
+              data={data1}
               cx={250}
               cy={200}
               innerRadius={90}
@@ -145,8 +220,8 @@ export default function User() {
         </div>
       </div>
       <div>
-        <StackedChart/>
+        <StackedChart tasks={tasks}/>
       </div>
     </div>
-  )
+  );
 }

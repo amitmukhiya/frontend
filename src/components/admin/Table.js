@@ -76,17 +76,21 @@ export default function DataTable() {
     navigate(`/${e.row._id}`)
   }
   return (
-    <div
-      style={{ height: 400, width: '75%', padding: '20px', margin: '20px, 0' }}
-    >
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={10}
-        rowsPerPageOptions={[10]}
-        checkboxSelection
-        onRowClick={onClick}
-      />
-    </div>
+    <>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div
+          style={{ height: '80vh', width: '90%', padding: '20px', margin: '20px 0' }}
+        >
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            pageSize={100}
+            rowsPerPageOptions={[10]}
+            checkboxSelection
+            onRowClick={onClick}
+          />
+        </div>
+      </div>
+    </>
   )
 }
